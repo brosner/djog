@@ -2,8 +2,10 @@
 import datetime, httplib, urllib, urlparse, re
 
 from django.db import models
+from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
+from django.contrib.sites.models import Site
 
 class Entry(models.Model):
     title = models.CharField(_('Title'), max_length=100, unique=True)
@@ -63,42 +65,53 @@ class TrackBack(models.Model):
     def __unicode__(self):
         return self.url
     
+    def _connect_to_url(self, url):
+        # ensure the url starts with http since the connection wont work
+        if not url.startswith('http'):
+            url = 'http://' + url
+        url_bits = urlparse.urlparse(url)
+        if url_bits[0] == 'https':
+            conn = httplib.HTTPSConnection(url_bits[1])
+        else:
+            conn = httplib.HTTPConnection(url_bits[1])
+        return conn, url_bits[2]
+    
     def autodiscover(self):
-        url = urlparse.urlparse(self.url)
-        host = url[1]
-        path = url[2]
-        conn = httplib.HTTPConnection(host)
-        conn.request("GET", path)
+        conn, path = self._connect_to_url(self.url)
+        conn.request('GET', path)
         response = conn.getresponse()
-        data = response.read()
-        tbpattern = r'trackback:ping="(.*?)"'
-        reg = re.search(tbpattern, data)
-        if reg:
-            self.tbURL = reg.group(1)
+        tb_regex = re.search(r'trackback:ping="(.*?)"', response.read())
+        if tb_regex:
+            self.tbURL = tb_regex.group(1)
     
     def ping(self):
-        params = urllib.urlencode({'title': self.entry.title, 'url': "http://71.201.176.194:8080%s" % self.entry.get_absolute_url(), 'excerpt': self.entry.text, 'blog_name': "Alex's Blog"})
-        headers = ({"Content-type": "application/x-www-form-urlencoded", "User-Agent": "Python"})
-        tbURLTuple = urlparse.urlparse("%s" % self.tbURL)
-        host = tbURLTuple[1]
-        path = tbURLTuple[2]
-        connection = httplib.HTTPConnection(host)
-        connection.request("POST", path, params, headers)
-        response = connection.getresponse()
-        httpResponse = response.reason
+        params = urllib.urlencode({
+            'title': self.entry.title,
+            'url': '%s/%s' % (
+                Site.objects.get_current(),
+                self.entry.get_absolute_url()
+            ),
+            'excerpt': self.entry.text,
+            # TODO: make this configurable (i dont care about alex's blog hehe)
+            'blog_name': "Alex's Blog"
+        })
+        conn, path = self._connect_to_url(str(self.tbURL))
+        conn.request("POST", path, params, ({
+            "Content-type": "application/x-www-form-urlencoded",
+            "User-Agent": "Python"
+        }))
+        response = conn.getresponse()
         data = response.read()
-        errorpattern = r'<error>(.*?)</error>'
-        reg = re.search(errorpattern, data)
-        if reg:
-            tbErrorCode = reg.group(1)
-            if int(tbErrorCode) == 0:
+        error_regex = re.search(r'<error>(.*?)</error>', data)
+        if error_regex:
+            tb_error_code = error_regex.group(1)
+            if int(tb_error_code) == 0:
                 self.status = True
             else:
-                errorpattern2 = r'<message>(.*?)</message'
-                reg2 = re.search(errorpattern2, self.tbResponse)
-                if reg2:
-                    self.error = reg2.group(1)
-        connection.close()
+                msg_regex = re.search(r'<message>(.*?)</message', data)
+                if msg_regex:
+                    self.error = msg_regex.group(1)
+        conn.close()
     
     def save(self):
         self.autodiscover()
