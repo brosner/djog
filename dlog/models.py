@@ -45,7 +45,7 @@ class Tag(models.Model):
         pass
 
     def num_stories(self):
-        return Entry.objects.filter(tags__tag=self).count()
+        return Entry.objects.filter(tags__tag=unicode(self)).count()
 
     def get_absolute_url(self):
         return "/blog/tags/%s/" % (self.slug)
