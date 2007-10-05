@@ -2,16 +2,17 @@
 import datetime, httplib, urllib, urlparse, re
 
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 
 from dlog import search
 
 class Entry(models.Model):
-    title = models.CharField(max_length=100, unique=True)
-    slug = models.SlugField(prepopulate_from=("title",), max_length=100, unique=True)
-    text = models.TextField()
-    author = models.ForeignKey(User)
-    tags = models.ManyToManyField("Tag", filter_interface=models.HORIZONTAL)
+    title = models.CharField(_('Title'), max_length=100, unique=True)
+    slug = models.SlugField(_('Slug'), prepopulate_from=("title",), max_length=100, unique=True)
+    text = models.TextField(_('Text'))
+    author = models.ForeignKey(User, verbose_name=_('Author'))
+    tags = models.ManyToManyField("Tag", verbose_name=_('Tag'), filter_interface=models.HORIZONTAL)
     pub_date = models.DateTimeField(default=datetime.datetime.now)
     
     search = search.SphinxSearch()
@@ -20,7 +21,7 @@ class Entry(models.Model):
         return self.title
 
     class Meta:
-        verbose_name_plural = 'Entries'
+        verbose_name_plural = _('Entries')
         ordering = ('-pub_date',)
         get_latest_by = 'pub_date'
 
@@ -38,8 +39,8 @@ class Entry(models.Model):
         return "/blog/trackback/%s/" % self.pk
 
 class Tag(models.Model):
-    tag = models.CharField(max_length=50, unique=True, core=True)
-    slug = models.SlugField(prepopulate_from=("tag",), max_length=50, unique=True)
+    tag = models.CharField(_('Tag'), max_length=50, unique=True, core=True)
+    slug = models.SlugField(_('Slug'), prepopulate_from=("tag",), max_length=50, unique=True)
 
     def __unicode__(self):
         return self.tag
@@ -57,11 +58,11 @@ class Tag(models.Model):
         return "/blog/feeds/tags/%s/" % self.slug
 
 class TrackBack(models.Model):
-    entry = models.ForeignKey(Entry, edit_inline=models.STACKED, num_in_admin=1)
-    url = models.URLField(max_length=255, core=True)
-    tbURL = models.URLField(max_length=255, null=True, blank=True, editable=False)
-    status = models.BooleanField(null=True, blank=True, editable=False)
-    error = models.CharField(max_length=255, null=True, blank=True, editable=False)
+    entry = models.ForeignKey(Entry, verbose_name=_('Entry'), edit_inline=models.STACKED, num_in_admin=1)
+    url = models.URLField(_('URL'), max_length=255, core=True)
+    tbURL = models.URLField(_('Trackback URL'), max_length=255, null=True, blank=True, editable=False)
+    status = models.BooleanField(_('Status'), null=True, blank=True, editable=False)
+    error = models.CharField(_('Error'), max_length=255, null=True, blank=True, editable=False)
     
     def __unicode__(self):
         return self.url
@@ -112,12 +113,12 @@ class TrackBack(models.Model):
         pass
 
 class IncomingTrackBack(models.Model):
-    title = models.CharField(max_length=255, null=True, blank=True, editable=False)
-    excerpt = models.CharField(max_length=255, null=True, blank=True, editable=False)
-    url = models.URLField(max_length=255, editable=False)
-    blog = models.CharField(max_length=255, null=True, blank=True, editable=False)
-    entry = models.ForeignKey(Entry)
-    time = models.DateTimeField(default=datetime.datetime.now)
+    title = models.CharField(_('Title'), max_length=255, null=True, blank=True, editable=False)
+    excerpt = models.CharField(_('Excerpt'), max_length=255, null=True, blank=True, editable=False)
+    url = models.URLField(_('URL'), max_length=255, editable=False)
+    blog = models.CharField(_('Blog'), max_length=255, null=True, blank=True, editable=False)
+    entry = models.ForeignKey(Entry, verbose_name=_('Entry'))
+    time = models.DateTimeField(_('Time'), default=datetime.datetime.now)
     
     def __unicode__(self):
         return "%s: %s" % (self.blog, self.title)
