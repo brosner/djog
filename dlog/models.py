@@ -5,8 +5,6 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 
-from dlog import search
-
 class Entry(models.Model):
     title = models.CharField(_('Title'), max_length=100, unique=True)
     slug = models.SlugField(_('Slug'), prepopulate_from=("title",), max_length=100, unique=True)
@@ -15,8 +13,6 @@ class Entry(models.Model):
     tags = models.ManyToManyField("Tag", verbose_name=_('Tag'), filter_interface=models.HORIZONTAL)
     pub_date = models.DateTimeField(default=datetime.datetime.now)
     
-    search = search.SphinxSearch()
-
     def __unicode__(self):
         return self.title
 

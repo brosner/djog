@@ -23,7 +23,7 @@ def Search(request):
     if not request.GET.has_key('s'):
         return HttpResponseRedirect('/blog/')
     search = smart_str(request.GET['s'])
-    all = Entry.search.query(search)
+    all = Entry.objects.filter(Q(title__icontains=search) | Q(text__icontains=search))
     
     return render_to_response('blog/search.html', {'term': search, 'results': all})
 
