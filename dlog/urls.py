@@ -19,12 +19,19 @@ feeds = {
     'search': EntriesBySearch,
 }
 
-urlpatterns = patterns('',
-    (r'^(?P<year>\d{4})/(?P<month>[a-z]{3})/(?P<day>\w{1,2})/(?P<slug>[-\w]+)/$', 'django.views.generic.date_based.object_detail', dict(blog_dict, slug_field='slug')),
-    (r'^(?P<year>\d{4})/(?P<month>[a-z]{3})/(?P<day>\w{1,2})/$', 'django.views.generic.date_based.archive_day', date_dict),
-    (r'^(?P<year>\d{4})/(?P<month>[a-z]{3})/$', 'django.views.generic.date_based.archive_month', date_dict),
-    (r'^(?P<year>\d{4})/$', 'django.views.generic.date_based.archive_year', date_dict),
-    (r'^$', 'django.views.generic.date_based.archive_index', blog_dict),
+#
+# date based urls using django's generic views
+#
+urlpatterns = patterns('django.views.generic.date_based',
+	(r'^(?P<year>\d{4})/(?P<month>[a-z]{3})/(?P<day>\w{1,2})/(?P<slug>[-\w]+)/$',
+		'object_detail', dict(blog_dict, slug_field='slug')),
+    (r'^(?P<year>\d{4})/(?P<month>[a-z]{3})/(?P<day>\w{1,2})/$', 'archive_day', date_dict),
+    (r'^(?P<year>\d{4})/(?P<month>[a-z]{3})/$', 'archive_month', date_dict),
+    (r'^(?P<year>\d{4})/$', 'archive_year', date_dict),
+    (r'^$', 'archive_index', blog_dict),
+)
+
+urlpatterns += patterns('',
     (r'^tags/(?P<slug>[-\w]+)/$', 'dlog.views.EntriesByTag'),
     (r'^feeds/(?P<url>.*)/$', 'django.contrib.syndication.views.feed', {'feed_dict': feeds}),
     (r'^search/$', 'dlog.views.Search'),
