@@ -15,7 +15,7 @@ date_dict = dict(blog_dict, template_name='blog/entry_date.html')
 feeds = {
 	'latest': LatestEntries,
 	'comments': LatestCommentsByEntry,
-	'tags': LatestEntriesBYTag,
+	'tags': LatestEntriesByTag,
 	'search': EntriesBySearch,
 }
 

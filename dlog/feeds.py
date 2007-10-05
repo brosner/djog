@@ -32,7 +32,7 @@ class LatestCommentsByEntry(Feed):
 	def items(self, obj):
 		return FreeComment.objects.filter(content_type='14').filter(object_id=obj.pk).order_by('-submit_date')[:10]
 
-class LatestEntriesBYTag(Feed):
+class LatestEntriesByTag(Feed):
 	def get_object(self, bits):
 		if len(bits) != 1:
 			raise ObjectDoesNotExist
