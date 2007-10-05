@@ -1,8 +1,10 @@
+
 from django.contrib.comments.views.comments import post_free_comment
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.utils.encoding import smart_str
-from aaron.blog.models import *
+
+from dlog.models import *
 
 def post_free_comment_redirect(request):
 	if request.POST.has_key('url'):

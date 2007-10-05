@@ -1,7 +1,9 @@
+
 from django.conf.urls.defaults import *
-from aaron.blog.models import Entry, Tag
-from aaron.blog.feeds import *
-from aaron.blog.views import *
+
+from dlog.models import Entry, Tag
+from dlog.feeds import *
+from dlog.views import *
 
 blog_dict = {
     'queryset': Entry.objects.all(),
@@ -23,8 +25,8 @@ urlpatterns = patterns('',
 	(r'^(?P<year>\d{4})/(?P<month>[a-z]{3})/$', 'django.views.generic.date_based.archive_month', date_dict),
 	(r'^(?P<year>\d{4})/$', 'django.views.generic.date_based.archive_year', date_dict),
 	(r'^$', 'django.views.generic.date_based.archive_index', blog_dict),
-	(r'^tags/(?P<slug>[-\w]+)/$', 'aaron.blog.views.EntriesByTag'),
+	(r'^tags/(?P<slug>[-\w]+)/$', 'dlog.views.EntriesByTag'),
 	(r'^feeds/(?P<url>.*)/$', 'django.contrib.syndication.views.feed', {'feed_dict': feeds}),
-	(r'^search/$', 'aaron.blog.views.Search'),
-	(r'^trackback/(?P<id>\d+)/$', 'aaron.blog.views.trackback'),
+	(r'^search/$', 'dlog.views.Search'),
+	(r'^trackback/(?P<id>\d+)/$', 'dlog.views.trackback'),
 )

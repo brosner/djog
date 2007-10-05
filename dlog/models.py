@@ -1,7 +1,10 @@
+
+import datetime, httplib, urllib, urlparse, re
+
 from django.db import models
 from django.contrib.auth.models import User
-from aaron.blog import search
-import datetime, httplib, urllib, urlparse, re
+
+from dlog import search
 
 class Entry(models.Model):
 	title = models.CharField(max_length=100, unique=True)
