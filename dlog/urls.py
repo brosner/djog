@@ -29,4 +29,6 @@ urlpatterns = patterns('',
 	(r'^feeds/(?P<url>.*)/$', 'django.contrib.syndication.views.feed', {'feed_dict': feeds}),
 	(r'^search/$', 'dlog.views.Search'),
 	(r'^trackback/(?P<id>\d+)/$', 'dlog.views.trackback'),
+	(r'^comments/postfree/', 'dlog.views.post_free_comment_redirect'),
+	(r'^comments/', include('django.contrib.comments.urls.comments')),
 )

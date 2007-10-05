@@ -1,5 +1,5 @@
 {% if display_form %}
-	<form id="commentform" action="/comments/postfree/" method="post">
+	<form id="commentform" action="/blog/comments/postfree/" method="post">
 		<p><input type="text" id="id_person_name" name="person_name" size="22"/> <label for="id_person_name"><small>Name(required)</small></label></p>
 		<p><textarea name="comment" id="id_comment" rows="10" cols="60" ></textarea></p>
 		<p><input type="hidden" name="options" value="{{ options }}" />
