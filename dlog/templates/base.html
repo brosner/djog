@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<title>Alex's Blog - {% block title %}{% endblock %}</title>
+	{% block head_extra %}{% endblock %}
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<link type="text/css" href="/styles/style.css" rel="stylesheet" />
+</head>
+<body>
+	<div id="container">
+		<div id="header_wrap">
+			<div id="header">
+				<div class="blog_title_wrap">
+					<div class="blog_title">
+						<h1><a href="/blog/">Alex's Blog</a></h1>
+					</div>
+				</div>
+				<div class="clear"></div>
+				<div class="topmenu">
+					<ul>
+						<li class="page_item">
+							<a href="/blog/about">About</a>
+						</li>
+						<li class="rss">{% block rss %}{% endblock %}</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="clear"></div>
+		<div id="page">
+			<div class="main">
+				{% block content %}{% endblock %}
+				<div class="navigation">
+					{% block navigation %}{% endblock %}
+				</div>
+			</div>
+			<div class="sidebar">
+				<ul>{% include "sidebar1.html" %}</ul>
+			</div>
+			<div class="sidebar">
+				<ul>{% include "sidebar2.html" %}</ul>
+			</div>
+		</div>
+		<div class="clear"></div>
+		<div id="footer">
+			<p>
+				<a href="http://www.djangoproject.com/"><img src="http://media.djangoproject.com/img/badges/djangosite80x15.gif" alt="A Django site." title="A Django site." /></a>.  This template is adapted from Pride at <a href="http://www.wpdesigner.com">Wpdesigner</a>
+			</p>
+		</div>
+	</div>
+</body>
+</html>

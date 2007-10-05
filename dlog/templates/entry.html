@@ -1,0 +1,39 @@
+<div id="post_{{ entry.pk }}" class="post">
+	<div class="post_date">
+		<div class="post_month">{{ entry.pub_date|date:"M" }}</div>
+		<div class="post_day">{{ entry.pub_date|date:"j" }}</div>
+	</div>
+	<div class="post_title">
+		<h2><a href="{{ entry.get_absolute_url }}">{{ entry.title }}</a></h2>
+		<div class="postdata">
+			Posted by {{ entry.author.username }} and tagged with: {% for tag in entry.tags.all %}<a href="{{ tag.get_absolute_url }}">{{ tag.tag }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}
+		</div>
+	</div>
+	<div class="clear"></div>
+	<div class="entry">
+		<div style="float: right;">
+			<script type="text/javascript">
+			digg_url = '71.201.176.194:8080{{ entry.get_absolute_url }}';
+			digg_skin = 'compact';
+			digg_title = '{{ entry.title }}';
+			</script>
+			<script src="http://digg.com/tools/diggthis.js" type="text/javascript" />
+		</div>		
+		<p>{{ entry.text }}</p>
+		<p class="comments_number">
+			<a href="{{ entry.get_absolute_url }}#comments">{{ comment_count }} Comment{{ comment_count|pluralize }}</a> | <a href="{{ entry.get_absolute_url }}#trackbacks">{{ entry.incomingtrackback_set.count }} Trackback{{ entry.incomingtrackback_set.count|pluralize }}</a>
+		</p>
+	</div>
+<!--
+<rdf:RDF	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+			xmlns:dc="http://purl.org/dc/elements/1.1/"
+			xmlns:trackback="http://71.201.176.194:8080/blog/">
+<rdf:Description
+			rdf:about="http://71.201.176.194:8080{{ entry.get_absolute_url }}"
+			dc:identifier="http://71.201.176.194:8080{{ entry.get_absolute_url }}"
+			dc:title="{{ entry.title }}"
+			trackback:ping="http://71.201.176.194:8080{{ entry.get_trackback_url }}" />
+</rdf:RDF>
+-->
+</div>
+<div class="clear"></div>

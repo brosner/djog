@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}{{ object.title|escape }}{% endblock %}
+{% block head_extra %}<link href="{{ object.get_rss_url }}" title="Alex's Blog - Comments on &quot;{{ object.title }}&quot;" type="application/rss+xml" rel="alternate"/>{% endblock %}
+{% block rss %}<a href="{{ object.get_rss_url }}">RSS</a>{% endblock %}
+
+
+{% block content %}
+{% load comments %}
+<div id="post_{{ object.pk }}" class="post">
+	<div class="post_date">
+		<div class="post_month">{{ object.pub_date|date:"M" }}</div>
+		<div class="post_day">{{ object.pub_date|date:"j" }}</div>
+	</div>
+	<div class="post_title">
+		<h2><a href="{{ object.get_absolute_url }}">{{ object.title|escape }}</a></h2>
+		<div class="postdata">
+			Posted by {{ object.author.username }} and tagged with: {% for tag in object.tags.all %}<a href="{{ tag.get_absolute_url }}">{{ tag.tag }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}
+		</div>
+	</div>
+	<div class="clear"></div>
+	<div class="entry">
+		<div style="float: right;">
+				<script type="text/javascript">
+				digg_url = '71.201.176.194:8080{{ object.get_absolute_url }}';
+				digg_skin = 'compact';
+				digg_title = '{{ object.title }}';
+				</script>
+				<script src="http://digg.com/tools/diggthis.js" type="text/javascript" />
+		</div>		
+		<p>{{ object.text }}</p>
+	</div>
+<!--
+<rdf:RDF	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+			xmlns:dc="http://purl.org/dc/elements/1.1/"
+			xmlns:trackback="http://71.201.176.194:8080/blog/">
+<rdf:Description
+			rdf:about="http://71.201.176.194:8080{{ object.get_absolute_url }}"
+			dc:identifier="http://71.201.176.194:8080{{ object.get_absolute_url }}"
+			dc:title="{{ object.title }}"
+			trackback:ping="http://71.201.176.194:8080{{ object.get_trackback_url }}" />
+</rdf:RDF>
+-->
+</div>
+<div class="clear"></div>
+<div class="comments_template_wrap">
+	<div class="comments_template">
+		<h3 id="trackbacks">{{ object.incomingtrackback_set.count }} Trackback{{ object.incomingtrackback_set.count|pluralize }} to "{{ object.title }}"</h3>
+		<ol class="commentlist">
+			{% for trackback in object.incomingtrackback_set.all %}
+			<li id="t{{ trackback.pk }}" class="{% cycle 'alt '' as alt %}">
+				<cite><a href="{{ trackback.url }}">{{ trackback.blog }}</a></cite> Says:<br />
+				<small>
+					<a href="#t{{ trackback.pk }}">{{ trackback.time|date:"F j, Y" }} at {{ trackback.time|date:"P" }}</a>
+				</small>
+				<p><strong>{{ trackback.title|escape }}</strong></p>
+				<p>{{ trackback.excerpt|escape }}</p>
+			</li>
+			{% endfor %}
+		</ol>
+	</div>
+</div>
+<div class="clear"></div>
+{% get_free_comment_count for blog.entry object.pk as comment_count %}
+{% get_free_comment_list for blog.entry object.pk as comment_list %}
+<div class="comments_template_wrap">
+	<div class="comments_template">
+		<h3 id="comments">{{ comment_count }} Response{{ comment_count|pluralize }} to "{{ object.title }}"</h3>
+		<ol class="commentlist">
+			{% for comment in comment_list %}
+				<li id="c{{ comment.pk }}" class="{% cycle 'alt' '' as alt %}">
+					<cite>{{ comment.person_name }}</cite> Says:<br />
+					<small class="commentmetadata">
+						<a href="#c{{ comment.pk }}">{{ comment.submit_date|date:"F j, Y" }} at {{ comment.submit_date|date:"P" }}</a>
+					</small>
+					<p>{{ comment.comment|escape|urlizetrunc:"40"|linebreaksbr }}</p>
+				</li>
+			{% endfor %}
+		</ol>
+		<h3 id="respond">Leave a Reply</h3>
+		{% free_comment_form for blog.entry object.pk %}
+	</div>
+</div>
+
+
+{% endblock %}

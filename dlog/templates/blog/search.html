@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Search Results for &quot;{{ term|escape }}&quot;{% endblock %}
+{% block head_extra %}<link href="/blog/feeds/search/{{ term|escape }}" title="Alex's Blog - Search Results for &quot;{{ term|escape }}&quot;" type="application/rss+xml" rel="alternate" />{% endblock %}
+{% block rss %}<a href="/blog/feeds/search/{{ term|escape }}/">RSS</a>{% endblock %}
+
+{% block content %}
+{% if results %}
+{% load comments %}
+{% for entry in results %}
+{% get_free_comment_count for blog.entry entry.pk as comment_count %}
+{% include "entry.html" %}
+{% endfor %}
+{% else %}
+<div class="post">
+	<div class="post_title post_title_alt">
+		<h2>No Results for &quot;{{ term|escape }}&quot;</h2>
+	</div>
+	<div class="clear"></div>
+	<div class="entry">
+		<p>There were no results for your search, please try again.</p>
+	</div>
+</div>
+{% endif %}
+{% endblock %}
