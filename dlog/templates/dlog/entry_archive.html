@@ -8,7 +8,7 @@
 {% block content %}
 {% load comments %}
 {% for entry in latest %}
-{% get_free_comment_count for blog.entry entry.pk as comment_count %}
+{% get_free_comment_count for dlog.entry entry.pk as comment_count %}
 {% include "entry.html" %}
 {% endfor %}
 {% endblock %}
