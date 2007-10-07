@@ -66,5 +66,6 @@ class EntriesBySearch(Feed):
         return "Search results for \"%s\"" % obj
     
     def items(self, obj):
-        return Entry.search.query(obj)
+        return Entry.objects.filter(Q(title__icontains=obj) | Q(text__icontains=obj))
+
     
