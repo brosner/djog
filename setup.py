@@ -1,1 +1,1 @@
-# will soon be the setuptools script to install dlog
+# will soon be the setuptools script to install djog
