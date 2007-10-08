@@ -24,11 +24,11 @@ feeds = {
 #
 urlpatterns = patterns('django.views.generic.date_based',
 	(r'^(?P<year>\d{4})/(?P<month>[a-z]{3})/(?P<day>\w{1,2})/(?P<slug>[-\w]+)/$',
-        'object_detail', dict(blog_dict, slug_field='slug'), name='djog_entry'),
-    (r'^(?P<year>\d{4})/(?P<month>[a-z]{3})/(?P<day>\w{1,2})/$', 'archive_day', date_dict, name='djog_daily'),
-    (r'^(?P<year>\d{4})/(?P<month>[a-z]{3})/$', 'archive_month', date_dict, name='djog_monthly'),
-    (r'^(?P<year>\d{4})/$', 'archive_year', date_dict, name='djog_yearly'),
-    (r'^$', 'archive_index', blog_dict, name='djog_index'),
+        'object_detail', dict(blog_dict, slug_field='slug'), 'djog_entry'),
+    (r'^(?P<year>\d{4})/(?P<month>[a-z]{3})/(?P<day>\w{1,2})/$', 'archive_day', date_dict, 'djog_daily'),
+    (r'^(?P<year>\d{4})/(?P<month>[a-z]{3})/$', 'archive_month', date_dict, 'djog_monthly'),
+    (r'^(?P<year>\d{4})/$', 'archive_year', date_dict, 'djog_yearly'),
+    (r'^$', 'archive_index', blog_dict, 'djog_index'),
 )
 
 urlpatterns += patterns('',
