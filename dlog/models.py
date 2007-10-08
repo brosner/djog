@@ -134,3 +134,8 @@ class IncomingTrackBack(models.Model):
     
     class Admin:
         pass
+
+class Configuration(models.Model):
+    site = models.ForeignKey(Site)
+    option = models.CharField(max_length=255)
+    value = models.CharField(max_length=255)
