@@ -1,6 +1,7 @@
 
 import datetime, httplib, urllib, urlparse, re
 
+from django.core import urlresolvers
 from django.db import models
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
@@ -28,13 +29,18 @@ class Entry(models.Model):
         search_fields = ['title', 'text']
 
     def get_absolute_url(self):
-        return "/blog/%s/%s/" % (self.pub_date.strftime("%Y/%b/%d").lower(), self.slug)
+        return urlresolvers.reverse('djog_entry', 
+            kwargs={'year': self.pub_date.strftime("%Y"),
+                    'month': self.pub_date.strftime("%b").lower(),
+                    'day': self.pub_date.strftime("%d")
+                    'slug': self.slug})
     
     def get_rss_url(self):
         return "/blog/feeds/comments/%s/%s/" % (self.pub_date.strftime("%Y/%b/%d").lower(), self.slug)
     
     def get_trackback_url(self):
-        return "/blog/trackback/%s/" % self.pk
+        return urlresolvers.reverse('trackback',
+            kwargs={'id': self.pk})
 
 class Tag(models.Model):
     tag = models.CharField(_('Tag'), max_length=50, unique=True, core=True)
@@ -50,7 +56,8 @@ class Tag(models.Model):
         return Entry.objects.filter(tags__tag=unicode(self)).count()
 
     def get_absolute_url(self):
-        return "/blog/tags/%s/" % (self.slug)
+        return urlresolvers.reverse('EntriesByTag',
+            kwargs={'slug': self.slug})
     
     def get_rss_url(self):
         return "/blog/feeds/tags/%s/" % self.slug
