@@ -139,3 +139,6 @@ class Configuration(models.Model):
     site = models.ForeignKey(Site)
     option = models.CharField(max_length=255)
     value = models.CharField(max_length=255)
+    
+    def __unicode__(self):
+        return "%s: %s" % (self.option, self.value)
