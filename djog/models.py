@@ -32,7 +32,7 @@ class Entry(models.Model):
         return urlresolvers.reverse('djog_entry', 
             kwargs={'year': self.pub_date.strftime("%Y"),
                     'month': self.pub_date.strftime("%b").lower(),
-                    'day': self.pub_date.strftime("%d")
+                    'day': self.pub_date.strftime("%d"),
                     'slug': self.slug})
     
     def get_rss_url(self):
