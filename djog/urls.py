@@ -36,6 +36,6 @@ urlpatterns += patterns('',
     (r'^feeds/(?P<url>.*)/$', 'django.contrib.syndication.views.feed', {'feed_dict': feeds}),
     (r'^search/$', 'djog.views.Search'),
     (r'^trackback/(?P<id>\d+)/$', 'djog.views.trackback'),
-    (r'^comments/postfree/', 'djog.views.post_free_comment_redirect'),
+    (r'^comments/postfree/', 'djog.views.post_free_comment_redirect', '', 'djog_postfree'),
     (r'^comments/', include('django.contrib.comments.urls.comments')),
 )
