@@ -1,9 +1,9 @@
 
 from django.conf.urls.defaults import *
 
-from dlog.models import Entry, Tag
-from dlog.feeds import *
-from dlog.views import *
+from djog.models import Entry, Tag
+from djog.feeds import *
+from djog.views import *
 
 blog_dict = {
     'queryset': Entry.objects.all(),
@@ -32,10 +32,10 @@ urlpatterns = patterns('django.views.generic.date_based',
 )
 
 urlpatterns += patterns('',
-    (r'^tags/(?P<slug>[-\w]+)/$', 'dlog.views.EntriesByTag'),
+    (r'^tags/(?P<slug>[-\w]+)/$', 'djog.views.EntriesByTag'),
     (r'^feeds/(?P<url>.*)/$', 'django.contrib.syndication.views.feed', {'feed_dict': feeds}),
-    (r'^search/$', 'dlog.views.Search'),
-    (r'^trackback/(?P<id>\d+)/$', 'dlog.views.trackback'),
-    (r'^comments/postfree/', 'dlog.views.post_free_comment_redirect'),
+    (r'^search/$', 'djog.views.Search'),
+    (r'^trackback/(?P<id>\d+)/$', 'djog.views.trackback'),
+    (r'^comments/postfree/', 'djog.views.post_free_comment_redirect'),
     (r'^comments/', include('django.contrib.comments.urls.comments')),
 )

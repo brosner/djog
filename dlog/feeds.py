@@ -4,7 +4,7 @@ from django.utils.encoding import smart_str
 from django.contrib.syndication.feeds import Feed
 from django.contrib.comments.models import FreeComment
 
-from dlog.models import Entry, Tag
+from djog.models import Entry, Tag
 
 class LatestEntries(Feed):
     title = "Alex's Blog: Latest Entries"

@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.utils.encoding import smart_str
 
-from dlog.models import *
+from djog.models import *
 
 def post_free_comment_redirect(request):
     if request.POST.has_key('url'):

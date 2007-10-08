@@ -1,6 +1,6 @@
 
 from django import template
-from dlog.models import *
+from djog.models import *
 
 register = template.Library()
 
