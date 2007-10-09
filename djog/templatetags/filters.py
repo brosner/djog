@@ -17,3 +17,7 @@ def show_archive():
         count = Entry.objects.filter(pub_date__month=month.month).count()
         counts.append((month, count))
     return {'counts': counts}
+
+@register.filter
+def searchify(term):
+    return "search/%s/" % term
