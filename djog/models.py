@@ -43,8 +43,7 @@ class Entry(models.Model):
         ))
     
     def get_trackback_url(self):
-        return urlresolvers.reverse('trackback',
-            kwargs={'id': self.pk})
+        return urlresolvers.reverse('djog_trackback', kwargs=dict(id=self.pk))
 
 class Tag(models.Model):
     tag = models.CharField(_('Tag'), max_length=50, unique=True, core=True)

@@ -37,7 +37,7 @@ urlpatterns += patterns('',
         'feed_dict': feeds,
     }, 'djog_feed'),
     (r'^search/$', 'djog.views.Search'),
-    (r'^trackback/(?P<id>\d+)/$', 'djog.views.trackback'),
+    (r'^trackback/(?P<id>\d+)/$', 'djog.views.trackback', {}, 'djog_trackback'),
     (r'^comments/postfree/', 'djog.views.post_free_comment_redirect', '', 'djog_postfree'),
     (r'^comments/', include('django.contrib.comments.urls.comments')),
 )
