@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
 {% block title %}Latest Entries{% endblock %}
-{% block head_extra %}<link href="/blog/feeds/latest/" title="Alex's Blog - Latest Entries" type="application/rss+xml" rel="alternate"/>{% endblock %}
-{% block rss %}<a href="/blog/feeds/latest/">RSS</a>{% endblock %}
+{% block head_extra %}<link href="{% url djog_feed "latest/" %}" title="Alex's Blog - Latest Entries" type="application/rss+xml" rel="alternate"/>{% endblock %}
+{% block rss %}<a href="{% url djog_feed "latest/" %}">RSS</a>{% endblock %}
 
 
 {% block content %}
