@@ -33,7 +33,9 @@ urlpatterns = patterns('django.views.generic.date_based',
 
 urlpatterns += patterns('',
     (r'^tags/(?P<slug>[-\w]+)/$', 'djog.views.EntriesByTag'),
-    (r'^feeds/(?P<url>.*)/$', 'django.contrib.syndication.views.feed', {'feed_dict': feeds}),
+    (r'^feeds/(?P<url>.*)/$', 'django.contrib.syndication.views.feed', {
+        'feed_dict': feeds,
+    }, 'djog_feed'),
     (r'^search/$', 'djog.views.Search'),
     (r'^trackback/(?P<id>\d+)/$', 'djog.views.trackback'),
     (r'^comments/postfree/', 'djog.views.post_free_comment_redirect', '', 'djog_postfree'),

@@ -36,7 +36,11 @@ class Entry(models.Model):
                     'slug': self.slug})
     
     def get_rss_url(self):
-        return "/blog/feeds/comments/%s/%s/" % (self.pub_date.strftime("%Y/%b/%d").lower(), self.slug)
+        return urlresolvers.reverse('djog_feed', kwargs=dict(
+            url = 'comments/%s/%s' % (
+                self.pub_date.strftime("%Y/%b/%d").lower(), self.slug
+            )
+        ))
     
     def get_trackback_url(self):
         return urlresolvers.reverse('trackback',
@@ -60,7 +64,9 @@ class Tag(models.Model):
             kwargs={'slug': self.slug})
     
     def get_rss_url(self):
-        return "/blog/feeds/tags/%s/" % self.slug
+        return urlresolvers.reverse('djog_feed', kwargs=dict(
+            url = 'tags/%s' % self.slug
+        ))
 
 class TrackBack(models.Model):
     entry = models.ForeignKey(Entry, verbose_name=_('Entry'), edit_inline=models.STACKED, num_in_admin=1)
