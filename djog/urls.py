@@ -23,7 +23,7 @@ feeds = {
 # date based urls using django's generic views
 #
 urlpatterns = patterns('django.views.generic.date_based',
-	(r'^(?P<year>\d{4})/(?P<month>[a-z]{3})/(?P<day>\w{1,2})/(?P<slug>[-\w]+)/$',
+    (r'^(?P<year>\d{4})/(?P<month>[a-z]{3})/(?P<day>\w{1,2})/(?P<slug>[-\w]+)/$',
         'object_detail', dict(blog_dict, slug_field='slug'), 'djog_entry'),
     (r'^(?P<year>\d{4})/(?P<month>[a-z]{3})/(?P<day>\w{1,2})/$', 'archive_day', date_dict, 'djog_daily'),
     (r'^(?P<year>\d{4})/(?P<month>[a-z]{3})/$', 'archive_month', date_dict, 'djog_monthly'),
