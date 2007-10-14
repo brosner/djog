@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-	<title>Alex's Blog - {% block title %}{% endblock %}</title>
+	<title>{{ blog.title }} - {% block title %}{% endblock %}</title>
 	{% block head_extra %}{% endblock %}
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<link type="text/css" href="{{ MEDIA_URL }}style.css" rel="stylesheet" />
@@ -12,7 +12,7 @@
 			<div id="header">
 				<div class="blog_title_wrap">
 					<div class="blog_title">
-						<h1><a href="{% url djog_index %}">Alex's Blog</a></h1>
+						<h1><a href="{% url djog_index %}">{{ blog. title }}</a></h1>
 					</div>
 				</div>
 				<div class="clear"></div>
