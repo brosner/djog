@@ -29,9 +29,9 @@ def Search(request):
 
 def trackback(request, id):
     if request.method != 'POST':
-        return render_to_response('trackback.xml', {'error_code': 1, 'message': "Request type must be POST"})
+        return render_to_response('trackback.xml', {'error_code': 1, 'message': "Request type must be POST"}, mimetype='text/xml')
     if not request.POST.get('url'):
-        return render_to_response('trackback.xml', {'error_code': 1, 'message': "URL not specified"})
+        return render_to_response('trackback.xml', {'error_code': 1, 'message': "URL not specified"}, mimetype='text/xml')
     tb = IncomingTrackBack()
     tb.entry_id = int(id)
     tb.title = request.POST.get('title')
@@ -39,4 +39,4 @@ def trackback(request, id):
     tb.url = request.POST.get('url')
     tb.blog = request.POST.get('blog_name')
     tb.save()
-    return render_to_response('trackback.xml', {'error_code': 0})
+    return render_to_response('trackback.xml', {'error_code': 0}, mimetype='text/xml')
