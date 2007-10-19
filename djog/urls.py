@@ -10,7 +10,7 @@ blog_dict = {
     'date_field': 'pub_date',
 }
 
-date_dict = dict(blog_dict, template_name='blog/entry_date.html')
+date_dict = dict(blog_dict, template_name='djog/entry_date.html')
 
 feeds = {
     'latest': LatestEntries,
