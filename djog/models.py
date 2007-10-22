@@ -7,8 +7,23 @@ from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
+from django.contrib.sites.managers import CurrentSiteManager
+
+class Blog(models.Model):
+    site = models.ForeignKey(Site)
+    title = models.CharField(_('Title'), max_length=100)
+    
+    objects = models.Manager()
+    on_site = CurrentSiteManager()
+    
+    class Admin:
+        pass
+    
+    def __unicode__(self):
+        return self.title
 
 class Entry(models.Model):
+    blog = models.ForeignKey(Blog, verbose_name=_('Blog'))
     title = models.CharField(_('Title'), max_length=100, unique=True)
     slug = models.SlugField(_('Slug'), prepopulate_from=("title",), max_length=100, unique=True)
     text = models.TextField(_('Text'))
@@ -46,6 +61,7 @@ class Entry(models.Model):
         return urlresolvers.reverse('djog_trackback', kwargs=dict(id=self.pk))
 
 class Tag(models.Model):
+    blog = models.ForeignKey(Blog, verbose_name=_('Blog'))
     tag = models.CharField(_('Tag'), max_length=50, unique=True, core=True)
     slug = models.SlugField(_('Slug'), prepopulate_from=("tag",), max_length=50, unique=True)
 
@@ -59,7 +75,7 @@ class Tag(models.Model):
         return Entry.objects.filter(tags__tag=unicode(self)).count()
 
     def get_absolute_url(self):
-        return urlresolvers.reverse('EntriesByTag',
+        return urlresolvers.reverse('djog_entries_by_tag',
             kwargs={'slug': self.slug})
     
     def get_rss_url(self):
@@ -104,8 +120,7 @@ class TrackBack(models.Model):
                 self.entry.get_absolute_url()
             ),
             'excerpt': self.entry.text,
-            # TODO: make this configurable (i dont care about alex's blog hehe)
-            'blog_name': "Alex's Blog"
+            'blog_name': unicode(self.entry.blog),
         })
         conn, path = self._connect_to_url(str(self.tbURL))
         conn.request("POST", path, params, ({
@@ -148,9 +163,10 @@ class IncomingTrackBack(models.Model):
         pass
 
 class Configuration(models.Model):
-    site = models.ForeignKey(Site)
+    blog = models.ForeignKey(Blog, verbose_name=_('Blog'))
     option = models.CharField(max_length=255)
     value = models.CharField(max_length=255)
     
     def __unicode__(self):
         return "%s: %s" % (self.option, self.value)
+    

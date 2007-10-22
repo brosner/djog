@@ -1,43 +1,30 @@
 
 from django.conf.urls.defaults import *
+from djog import site
 
-from djog.models import Entry, Tag
-from djog.feeds import *
-from djog.views import *
-
-blog_dict = {
-    'queryset': Entry.objects.all(),
-    'date_field': 'pub_date',
-}
-
-date_dict = dict(blog_dict, template_name='djog/entry_date.html')
-
-feeds = {
-    'latest': LatestEntries,
-    'comments': LatestCommentsByEntry,
-    'tags': LatestEntriesByTag,
-    'search': EntriesBySearch,
-}
-
-#
-# date based urls using django's generic views
-#
-urlpatterns = patterns('django.views.generic.date_based',
+urlpatterns = patterns('',
     (r'^(?P<year>\d{4})/(?P<month>[a-z]{3})/(?P<day>\w{1,2})/(?P<slug>[-\w]+)/$',
-        'object_detail', dict(blog_dict, slug_field='slug'), 'djog_entry'),
-    (r'^(?P<year>\d{4})/(?P<month>[a-z]{3})/(?P<day>\w{1,2})/$', 'archive_day', date_dict, 'djog_daily'),
-    (r'^(?P<year>\d{4})/(?P<month>[a-z]{3})/$', 'archive_month', date_dict, 'djog_monthly'),
-    (r'^(?P<year>\d{4})/$', 'archive_year', date_dict, 'djog_yearly'),
-    (r'^$', 'archive_index', blog_dict, 'djog_index'),
+        site.entry, {}, 'djog_entry'),
+    (r'^(?P<year>\d{4})/(?P<month>[a-z]{3})/(?P<day>\w{1,2})/$',
+        site.archive_day, {}, 'djog_archive_daily'),
+    (r'^(?P<year>\d{4})/(?P<month>[a-z]{3})/$',
+        site.archive_month, {}, 'djog_archive_month'),
+    (r'^(?P<year>\d{4})/$',
+        site.archive_year, {}, 'djog_archive_year'),
+    (r'^tags/(?P<slug>[-\w]+)/$',
+        site.entries_by_tag, {}, 'djog_entries_by_tag'),
+    (r'^feeds/(?P<url>.*)/$',
+        site.feed, {}, 'djog_feed'),
+    (r'^search/$',
+        site.search, 'djog_search'),
+    (r'^trackback/(?P<id>\d+)/$',
+        site.trackback, {}, 'djog_trackback'),
+    (r'^$',
+        site.archive_index, {}, 'djog_index'),
 )
 
+# TODO: fix these
 urlpatterns += patterns('',
-    (r'^tags/(?P<slug>[-\w]+)/$', 'djog.views.EntriesByTag'),
-    (r'^feeds/(?P<url>.*)/$', 'django.contrib.syndication.views.feed', {
-        'feed_dict': feeds,
-    }, 'djog_feed'),
-    (r'^search/$', 'djog.views.Search'),
-    (r'^trackback/(?P<id>\d+)/$', 'djog.views.trackback', {}, 'djog_trackback'),
     (r'^comments/postfree/', 'djog.views.post_free_comment_redirect', '', 'djog_postfree'),
     (r'^comments/', include('django.contrib.comments.urls.comments')),
 )
