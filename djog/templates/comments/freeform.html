@@ -5,7 +5,7 @@
 		<p><input type="hidden" name="options" value="{{ options }}" />
 		<input type="hidden" name="target" value="{{ target }}" />
 		<input type="hidden" name="gonzo" value="{{ hash }}" />
-		<input type="hidden" name="url" value="{{ request.get_full_path }}" /></p>
+		<input type="hidden" name="url" value="{{ object.get_absolute_url }}" /></p>
 		<p><input id="submit" type="submit" name="post" value="Post comment" /></p>
 	</form>
 {% endif %}
