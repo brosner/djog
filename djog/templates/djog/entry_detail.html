@@ -61,8 +61,8 @@
 	</div>
 </div>
 <div class="clear"></div>
-{% get_free_comment_count for blog.entry object.pk as comment_count %}
-{% get_free_comment_list for blog.entry object.pk as comment_list %}
+{% get_free_comment_count for djog.entry object.pk as comment_count %}
+{% get_free_comment_list for djog.entry object.pk as comment_list %}
 <div class="comments_template_wrap">
 	<div class="comments_template">
 		<h3 id="comments">{{ comment_count }} Response{{ comment_count|pluralize }} to "{{ object.title }}"</h3>
@@ -78,7 +78,7 @@
 			{% endfor %}
 		</ol>
 		<h3 id="respond">Leave a Reply</h3>
-		{% free_comment_form for blog.entry object.pk %}
+		{% free_comment_form for djog.entry object.pk %}
 	</div>
 </div>
 

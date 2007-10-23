@@ -8,7 +8,7 @@
 {% if results %}
 {% load comments %}
 {% for entry in results %}
-{% get_free_comment_count for blog.entry entry.pk as comment_count %}
+{% get_free_comment_count for djog.entry entry.pk as comment_count %}
 {% include "entry.html" %}
 {% endfor %}
 {% else %}

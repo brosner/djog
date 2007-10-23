@@ -1,4 +1,5 @@
 
+from django.core import urlresolvers
 from django.http import HttpResponseRedirect
 from django.views.generic.date_based import *
 from django.shortcuts import render_to_response
@@ -69,7 +70,7 @@ class DjogSite(object):
     def entries_by_tag(self, request, slug):
         tag = Tag.objects.get(slug=slug)
         entries = Entry.objects.filter(tags__slug=slug)
-        return render_to_response('blog/tag_list.html', {
+        return render_to_response('djog/tag_list.html', {
             'entries': entries,
             'tag': tag,
         }, context_instance=RequestContext(request))
@@ -79,12 +80,12 @@ class DjogSite(object):
     
     def search(self, request):
         if not request.GET.has_key('s'):
-            return HttpResponseRedirect('/blog/')
+            return HttpResponseRedirect(urlresolvers.reverse('djog_index'))
         search = smart_str(request.GET['s'])
         results = Entry.objects.filter(
             Q(title__icontains=search) | Q(text__icontains=search)
         )
-        return render_to_response('blog/search.html', {
+        return render_to_response('djog/search.html', {
             'term': search,
             'results': results,
         }, context_instance=RequestContext(request))
