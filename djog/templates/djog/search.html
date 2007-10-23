@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load filters %}
 {% block title %}Search Results for &quot;{{ term|escape }}&quot;{% endblock %}
-{% block head_extra %}<link href="{% url djog_feed term|escape|searchify %}" title="{{ blog. title }} - Search Results for &quot;{{ term|escape }}&quot;" type="application/rss+xml" rel="alternate" />{% endblock %}
+{% block head_extra %}<link href="{% url djog_feed term|escape|searchify %}" title="{{ blog.title }} - Search Results for &quot;{{ term|escape }}&quot;" type="application/rss+xml" rel="alternate" />{% endblock %}
 {% block rss %}<a href="{% url djog_feed term|escape|searchify %}">RSS</a>{% endblock %}
 
 {% block content %}

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}Entries tagged with {{ tag }}{% endblock %}
-{% block head_extra %}<link href="{{ tag.get_rss_url }}" title="{{ blog. title }} - Latest Entries" type="application/rss+xml" rel="alternate"/>{% endblock %}
+{% block head_extra %}<link href="{{ tag.get_rss_url }}" title="{{ blog.title }} - Latest Entries" type="application/rss+xml" rel="alternate"/>{% endblock %}
 {% block rss %}<a href="{{ tag.get_rss_url }}">RSS</a>{% endblock %}
 
 {% block content %}

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}{{ object.title|escape }}{% endblock %}
-{% block head_extra %}<link href="{{ object.get_rss_url }}" title="{{ blog. title }} - Comments on &quot;{{ object.title }}&quot;" type="application/rss+xml" rel="alternate"/>{% endblock %}
+{% block head_extra %}<link href="{{ object.get_rss_url }}" title="{{ blog.title }} - Comments on &quot;{{ object.title }}&quot;" type="application/rss+xml" rel="alternate"/>{% endblock %}
 {% block rss %}<a href="{{ object.get_rss_url }}">RSS</a>{% endblock %}
 
 
