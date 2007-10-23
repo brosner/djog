@@ -1,5 +1,5 @@
 <li id="search">
-	<form id="searchform" action="/blog/search/" method="get">
+	<form id="searchform" action="{% url djog_search %}" method="get">
 		<div class="keyword">
 			<input id="s" type="text" onblur="if (this.value == '') {this.value = 'Search...';}" onfocus="if (this.value == 'Search...') {this.value = '';}" name="s" value="Search..." />
 		</div>
