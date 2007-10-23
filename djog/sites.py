@@ -1,5 +1,6 @@
 
 from django.core import urlresolvers
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.views.generic.date_based import *
 from django.shortcuts import render_to_response

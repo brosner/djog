@@ -1,5 +1,6 @@
 
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
 from django.utils.encoding import smart_str
 from django.contrib.syndication.feeds import Feed
 from django.contrib.comments.models import FreeComment
