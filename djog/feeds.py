@@ -30,7 +30,7 @@ class LatestCommentsByEntry(Feed):
         return "The latest comments on \"%s\"" % obj.title
     
     def items(self, obj):
-        return FreeComment.objects.filter(content_type='12').filter(object_id=obj.pk).order_by('-submit_date')[:10]
+        return FreeComment.objects.filter(content_type__model='entry').filter(object_id=obj.pk).order_by('-submit_date')[:10]
 
 class LatestEntriesByTag(Feed):
     def get_object(self, bits):
