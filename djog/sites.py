@@ -7,23 +7,18 @@ from django.shortcuts import render_to_response
 from django.utils.encoding import smart_str
 from django.contrib.syndication.views import feed
 
-from djog.feeds import *
 from djog.models import Blog
 
 class DjogSite(object):
     
     def __init__(self):
-        self.feeds = {
-            'latest': LatestEntries,
-            'comments': LatestCommentsByEntry,
-            'tags': LatestEntriesByTag,
-            'search': EntriesBySearch,
-        }
+        self.feeds = {}
     
     def get_blog(self):
-        # TODO: look at this a bit more and find a good way to ensure it has
-        # an object.
         return Blog.on_site.all()[0]
+    
+    def add_feed(self, url, feed_class):
+        self.feeds.update({url: feed_class})
     
     def archive_index(self, request, **kwargs):
         defaults = dict(

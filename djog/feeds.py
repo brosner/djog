@@ -7,7 +7,7 @@ from django.contrib.comments.models import FreeComment
 
 from djog.models import Entry, Tag
 
-class LatestEntries(Feed):
+class EntryFeed(Feed):
     title = "Alex's Blog: Latest Entries"
     link = "/blog/latest/"
     description = "The latest entries on Alex's Blog"
@@ -15,7 +15,7 @@ class LatestEntries(Feed):
     def items(self):
         return Entry.objects.order_by('-pub_date')[:10]
 
-class LatestCommentsByEntry(Feed):
+class CommentsByEntryFeed(Feed):
     def get_object(self, bits):
         if len(bits) != 4:
             raise ObjectDoesNotExist
@@ -33,7 +33,7 @@ class LatestCommentsByEntry(Feed):
     def items(self, obj):
         return FreeComment.objects.filter(content_type__model='entry').filter(object_id=obj.pk).order_by('-submit_date')[:10]
 
-class LatestEntriesByTag(Feed):
+class EntriesByTagFeed(Feed):
     def get_object(self, bits):
         if len(bits) != 1:
             raise ObjectDoesNotExist
@@ -51,7 +51,7 @@ class LatestEntriesByTag(Feed):
     def items(self, obj):
         return Entry.objects.filter(tags__tag=obj.tag)[:10]
 
-class EntriesBySearch(Feed):
+class SearchFeed(Feed):
     def get_object(self, bits):
         if len(bits) != 1:
             raise ObjectDoesNotExist

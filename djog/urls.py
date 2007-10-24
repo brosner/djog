@@ -1,6 +1,13 @@
 
 from django.conf.urls.defaults import *
+
 from djog import site
+from djog.feeds import *
+
+site.add_feed('latest', EntryFeed)
+site.add_feed('comments', CommentsByEntryFeed)
+site.add_feed('tags', EntriesByTagFeed)
+site.add_feed('search', SearchFeed)
 
 urlpatterns = patterns('',
     (r'^(?P<year>\d{4})/(?P<month>[a-z]{3})/(?P<day>\w{1,2})/(?P<slug>[-\w]+)/$',
