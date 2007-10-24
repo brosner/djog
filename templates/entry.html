@@ -11,14 +11,6 @@
 	</div>
 	<div class="clear"></div>
 	<div class="entry">
-		<div style="float: right;">
-			<script type="text/javascript">
-			digg_url = '71.201.176.194:8080{{ entry.get_absolute_url }}';
-			digg_skin = 'compact';
-			digg_title = '{{ entry.title }}';
-			</script>
-			<script src="http://digg.com/tools/diggthis.js" type="text/javascript" />
-		</div>		
 		<p>{{ entry.text }}</p>
 		<p class="comments_number">
 			<a href="{{ entry.get_absolute_url }}#comments">{{ comment_count }} Comment{{ comment_count|pluralize }}</a> | <a href="{{ entry.get_absolute_url }}#trackbacks">{{ entry.incomingtrackback_set.count }} Trackback{{ entry.incomingtrackback_set.count|pluralize }}</a>
