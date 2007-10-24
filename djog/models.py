@@ -21,6 +21,9 @@ class Blog(models.Model):
     
     def __unicode__(self):
         return self.title
+    
+    def get_absolute_url(self):
+        return urlresolvers.reverse('djog_index')
 
 class Entry(models.Model):
     blog = models.ForeignKey(Blog, verbose_name=_('Blog'))
