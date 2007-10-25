@@ -19,5 +19,5 @@ def show_archive():
 register.inclusion_tag('monthly.html')(show_archive)
 
 def searchify(term):
-    return "search/%s/" % term
+    return "search/%s" % term
 register.filter('searchify', searchify)
