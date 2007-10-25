@@ -1,4 +1,5 @@
 
+from django.core import urlresolvers
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from django.utils.encoding import smart_str
@@ -67,7 +68,7 @@ class SearchFeed(Feed):
         return "%s: Search Results for \"%s\"" % (site.get_blog().title, obj)
     
     def link(self, obj):
-        return "?s=%s" % (urlresolvers.reverse('djog_search'), obj)
+        return "%s?s=%s" % (urlresolvers.reverse('djog_search'), obj)
     
     def description(self, obj):
         return "Search results for \"%s\"" % obj
