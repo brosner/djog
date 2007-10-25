@@ -7,7 +7,7 @@ from django.shortcuts import render_to_response
 from django.utils.encoding import smart_str
 from django.contrib.syndication.views import feed
 
-from djog.models import Blog
+from djog.models import Blog, Tag, Entry
 
 class DjogSite(object):
     
