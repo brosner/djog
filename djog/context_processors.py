@@ -1,7 +1,7 @@
 
 from djog import site
 
-def settings(request):
+def blog(request):
     return dict(
         site = site,
         blog = site.get_blog(),
