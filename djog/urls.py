@@ -32,6 +32,5 @@ urlpatterns = patterns('',
 
 # TODO: fix these
 urlpatterns += patterns('',
-    (r'^comments/postfree/', 'djog.views.post_free_comment_redirect', '', 'djog_postfree'),
     (r'^comments/', include('django.contrib.comments.urls.comments')),
 )

@@ -1,11 +1,14 @@
 {% if display_form %}
-	<form id="commentform" action="{% url djog_postfree %}" method="post">
-		<p><input type="text" id="id_person_name" name="person_name" size="22"/> <label for="id_person_name"><small>Name(required)</small></label></p>
-		<p><textarea name="comment" id="id_comment" rows="10" cols="60" ></textarea></p>
-		<p><input type="hidden" name="options" value="{{ options }}" />
-		<input type="hidden" name="target" value="{{ target }}" />
-		<input type="hidden" name="gonzo" value="{{ hash }}" />
-		<input type="hidden" name="url" value="{{ object.get_absolute_url }}" /></p>
-		<p><input id="submit" type="submit" name="post" value="Post comment" /></p>
+	<form id="commentform" action="#respond" method="post">
+        {{ form.as_p }}
+        <p>
+            <input type="hidden" name="target" value="{{ target }}" />
+            <input type="hidden" name="gonzo" value="{{ hash }}" />
+            <input type="hidden" name="url" value="{{ object.get_absolute_url }}" />
+            <input type="hidden" name="options" value="{{ options }}" />
+        </p>
+		<p>
+            <input id="submit" type="submit" name="post" value="Post comment" />
+        </p>
 	</form>
 {% endif %}

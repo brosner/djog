@@ -5,9 +5,12 @@ from django.http import HttpResponseRedirect
 from django.views.generic.date_based import *
 from django.shortcuts import render_to_response
 from django.utils.encoding import smart_str
+from django.contrib.comments.views.comments import post_free_comment
 from django.contrib.syndication.views import feed
 
 from djog.models import Blog, Tag, Entry
+
+from djog.forms import CommentForm
 
 class DjogSite(object):
     
@@ -61,7 +64,20 @@ class DjogSite(object):
             date_field = 'pub_date',
         )
         defaults.update(kwargs)
-        return object_detail(request, **defaults)
+        if request.method == 'POST':
+            form = CommentForm(request.POST)
+            if form.is_valid():
+                response = post_free_comment(request)
+                return HttpResponseRedirect(request.POST['url'])
+            else:
+                extra_context = dict(extra_context = dict(form=form))
+                defaults.update(extra_context)
+                return object_detail(request, **defaults)
+        else:
+            form = CommentForm()
+            extra_context = dict(extra_context = dict(form=form))
+            defaults.update(extra_context)
+            return object_detail(request, **defaults)
     
     def entries_by_tag(self, request, slug):
         tag = Tag.objects.get(slug=slug)
