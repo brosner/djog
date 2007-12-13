@@ -11,7 +11,7 @@ site.add_feed('search', SearchFeed)
 
 urlpatterns = patterns('',
     (r'^(?P<year>\d{4})/(?P<month>[a-z]{3})/(?P<day>\w{1,2})/(?P<slug>[-\w]+)/$',
-        site.entry, {}, 'djog_entry'),
+        site.post, {}, 'djog_post'),
     (r'^(?P<year>\d{4})/(?P<month>[a-z]{3})/(?P<day>\w{1,2})/$',
         site.archive_day, {}, 'djog_archive_daily'),
     (r'^(?P<year>\d{4})/(?P<month>[a-z]{3})/$',
@@ -26,6 +26,8 @@ urlpatterns = patterns('',
         site.search, {}, 'djog_search'),
     (r'^trackback/(?P<id>\d+)/$',
         site.trackback, {}, 'djog_trackback'),
+    (r'^(?P<slug>[-\w]+)/$',
+        site.page, {}, 'djog_page'),
     (r'^$',
         site.archive_index, {}, 'djog_index'),
 )

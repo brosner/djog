@@ -26,6 +26,14 @@ class Blog(models.Model):
         return urlresolvers.reverse('djog_index')
 
 class Entry(models.Model):
+    TYPE_POST = 0
+    TYPE_PAGE = 1
+    
+    ENTRY_TYPES = (
+        (TYPE_POST, 'Post'),
+        (TYPE_PAGE, 'Page'),
+    )
+
     blog = models.ForeignKey(Blog, verbose_name=_('Blog'))
     title = models.CharField(_('Title'), max_length=100, unique=True)
     slug = models.SlugField(_('Slug'), prepopulate_from=("title",), max_length=100, unique=True)
@@ -33,6 +41,9 @@ class Entry(models.Model):
     author = models.ForeignKey(User, verbose_name=_('Author'))
     tags = models.ManyToManyField("Tag", verbose_name=_('Tag'), filter_interface=models.HORIZONTAL)
     pub_date = models.DateTimeField(default=datetime.datetime.now)
+    entry_type = models.IntegerField(choices=ENTRY_TYPES, 
+        help_text=_('Select what type of Entry this is, currently there are regular blog posts, and pages(such as an About page, or a contact page).'), 
+        radio_admin=True, default=TYPE_POST)
     
     def __unicode__(self):
         return self.title
@@ -41,17 +52,22 @@ class Entry(models.Model):
         verbose_name_plural = _('Entries')
         ordering = ('-pub_date',)
         get_latest_by = 'pub_date'
+        unique_together = (("slug", "entry_type"),)
 
     class Admin:
         list_display = ('pub_date', 'title',)
         search_fields = ['title', 'text']
 
     def get_absolute_url(self):
-        return urlresolvers.reverse('djog_entry', 
-            kwargs={'year': self.pub_date.strftime("%Y"),
-                    'month': self.pub_date.strftime("%b").lower(),
-                    'day': self.pub_date.strftime("%d"),
-                    'slug': self.slug})
+        if self.entry_type == self.TYPE_POST:
+            return urlresolvers.reverse('djog_post', 
+                kwargs={'year': self.pub_date.strftime("%Y"),
+                        'month': self.pub_date.strftime("%b").lower(),
+                        'day': self.pub_date.strftime("%d"),
+                        'slug': self.slug})
+        elif self.entry_type == self.TYPE_PAGE:
+            return urlresolvers.reverse('djog_page',
+                kwargs={'slug': self.slug})
     
     def get_rss_url(self):
         return urlresolvers.reverse('djog_feed', kwargs=dict(

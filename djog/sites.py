@@ -3,6 +3,7 @@ from django.core import urlresolvers
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.views.generic.date_based import *
+from django.views.generic import list_detail
 from django.shortcuts import render_to_response
 from django.utils.encoding import smart_str
 from django.contrib.comments.views.comments import post_free_comment
@@ -25,7 +26,7 @@ class DjogSite(object):
     
     def archive_index(self, request, **kwargs):
         defaults = dict(
-            queryset = self.get_blog().entry_set.all(),
+            queryset = self.get_blog().entry_set.filter(entry_type=Entry.TYPE_POST),
             date_field = 'pub_date',
         )
         defaults.update(kwargs)
@@ -33,7 +34,7 @@ class DjogSite(object):
 
     def archive_year(self, request, **kwargs):
         defaults = dict(
-            queryset = self.get_blog().entry_set.all(),
+            queryset = self.get_blog().entry_set.filter(entry_type=Entry.TYPE_POST),
             date_field = 'pub_date',
             template_name = 'djog/entry_date.html',
         )
@@ -42,7 +43,7 @@ class DjogSite(object):
 
     def archive_month(self, request, **kwargs):
         defaults = dict(
-            queryset = self.get_blog().entry_set.all(),
+            queryset = self.get_blog().entry_set.filter(entry_type=Entry.TYPE_POST),
             date_field = 'pub_date',
             template_name = 'djog/entry_date.html',
         )
@@ -51,16 +52,16 @@ class DjogSite(object):
 
     def archive_day(self, request, **kwargs):
         defaults = dict(
-            queryset = self.get_blog().entry_set.all(),
+            queryset = self.get_blog().entry_set.filter(entry_type=Entry.TYPE_POST),
             date_field = 'pub_date',
             template_name = 'djog/entry_date.html',
         )
         defaults.update(kwargs)
         return archive_day(request, **defaults)
 
-    def entry(self, request, **kwargs):
+    def post(self, request, **kwargs):
         defaults = dict(
-            queryset = self.get_blog().entry_set.all(),
+            queryset = self.get_blog().entry_set.filter(entry_type=Entry.TYPE_POST),
             date_field = 'pub_date',
         )
         defaults.update(kwargs)
@@ -78,6 +79,29 @@ class DjogSite(object):
             extra_context = dict(extra_context = dict(form=form))
             defaults.update(extra_context)
             return object_detail(request, **defaults)
+    
+    def page(self, request, **kwargs):
+        defaults = dict(
+            queryset = self.get_blog().entry_set.filter(entry_type=Entry.TYPE_PAGE),
+            slug_field = 'slug',
+            template_name = 'djog/entry_detail.html',
+        )
+        defaults.update(kwargs)
+        if request.method == 'POST':
+            form = CommentForm(request.POST)
+            if form.is_valid():
+                response = post_free_comment(request)
+                return HttpResponseRedirect(request.POST['url'])
+            else:
+                extra_context = dict(extra_context = dict(form=form))
+                defaults.update(extra_context)
+                return list_detail.object_detail(request, **defaults)
+        else:
+            form = CommentForm()
+            extra_context = dict(extra_context = dict(form=form))
+            defaults.update(extra_context)
+            return list_detail.object_detail(request, **defaults)
+    
     
     def entries_by_tag(self, request, slug):
         tag = Tag.objects.get(slug=slug)
