@@ -4,10 +4,10 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from django.utils.encoding import smart_str
 from django.contrib.syndication.feeds import Feed
-from django.contrib.comments.models import FreeComment
 
 from djog import site
 from djog.models import Entry, Tag
+from djog.comments.models import Comment
 
 class EntryFeed(Feed):
     def title(self):
@@ -38,7 +38,7 @@ class CommentsByEntryFeed(Feed):
         return "The latest comments on \"%s\"" % obj.title
     
     def items(self, obj):
-        return FreeComment.objects.filter(content_type__model='entry').filter(object_id=obj.pk).order_by('-submit_date')[:10]
+        return Comment.objects.filter(content_type__model='entry').filter(object_id=obj.pk).order_by('-submit_date')[:10]
 
 class EntriesByTagFeed(Feed):
     def get_object(self, bits):

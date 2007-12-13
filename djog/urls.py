@@ -29,8 +29,3 @@ urlpatterns = patterns('',
     (r'^$',
         site.archive_index, {}, 'djog_index'),
 )
-
-# TODO: fix these
-urlpatterns += patterns('',
-    (r'^comments/', include('django.contrib.comments.urls.comments')),
-)

@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 from django.views.generic.date_based import *
 from django.shortcuts import render_to_response
 from django.utils.encoding import smart_str
-from django.contrib.comments.views.comments import post_free_comment
+#from django.contrib.comments.views.comments import post_free_comment
 from django.contrib.syndication.views import feed
 
 from djog.models import Blog, Tag, Entry
