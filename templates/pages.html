@@ -1,0 +1,5 @@
+{% for page in pages %}
+    <li class="page_item">
+        <a href="{{ page.get_absolute_url }}">{{ page.title }}</a>
+    </li>
+{% endfor %}
