@@ -143,10 +143,10 @@ class TrackBack(models.Model):
                     self.error = msg_regex.group(1)
         conn.close()
     
-    def save(self):
+    def save(self, **kwargs):
         self.autodiscover()
         self.ping()
-        super(TrackBack, self).save()
+        super(TrackBack, self).save(**kwargs)
     
     class Admin:
         pass
