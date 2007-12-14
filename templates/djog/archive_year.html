@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% load djog_utils %}
+
+{% block title %}Entries for {{ year }}{% endblock %}
+{% block head_extra %}<link href="{% url djog_feed "latest" %}" title="{{ blog.title }} - Latest Entries" type="application/rss+xml" rel="alternate"/>{% endblock %}
+{% block rss %}<a href="{% url djog_feed "latest" %}">RSS</a>{% endblock %}
+
+
+{% block content %}
+<div class="post">
+    <div class="post_title post_title_alt">
+        <h2>{{ year }} Archive</h2>
+    </div>
+    <div class="clear"></div>
+    <div class="entry">
+        <ul>
+            {% for month in date_list %}
+            <p>
+                <a href="{% url djog_archive_month month|date:"Y",month|date:"b" %}">{{ month|date:"F" }}</a>
+        </p>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

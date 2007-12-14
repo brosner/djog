@@ -36,7 +36,7 @@ class DjogSite(object):
         defaults = dict(
             queryset = self.get_blog().entry_set.filter(entry_type=Entry.TYPE_POST),
             date_field = 'pub_date',
-            template_name = 'djog/entry_date.html',
+            template_name = 'djog/archive_year.html',
         )
         defaults.update(kwargs)
         return archive_year(request, **defaults)
@@ -45,7 +45,7 @@ class DjogSite(object):
         defaults = dict(
             queryset = self.get_blog().entry_set.filter(entry_type=Entry.TYPE_POST),
             date_field = 'pub_date',
-            template_name = 'djog/entry_date.html',
+            template_name = 'djog/archive_month.html',
         )
         defaults.update(kwargs)
         return archive_month(request, **defaults)
@@ -54,7 +54,7 @@ class DjogSite(object):
         defaults = dict(
             queryset = self.get_blog().entry_set.filter(entry_type=Entry.TYPE_POST),
             date_field = 'pub_date',
-            template_name = 'djog/entry_date.html',
+            template_name = 'djog/archive_day.html',
         )
         defaults.update(kwargs)
         return archive_day(request, **defaults)

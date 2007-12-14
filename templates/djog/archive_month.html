@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% load djog_utils %}
+
+{% block title %}Entries for {{ month|date:"F, Y" }}{% endblock %}
+{% block head_extra %}<link href="{% url djog_feed "latest" %}" title="{{ blog.title }} - Latest Entries" type="application/rss+xml" rel="alternate"/>{% endblock %}
+{% block rss %}<a href="{% url djog_feed "latest" %}">RSS</a>{% endblock %}
+
+
+{% block content %}
+{% for entry in object_list %}
+{% show_entry entry %}
+{% endfor %}
+{% endblock %}

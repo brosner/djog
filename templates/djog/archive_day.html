@@ -2,7 +2,7 @@
 
 {% load djog_utils %}
 
-{% block title %}Entries for {% if year %}{{ year }}{% endif %}{% if month %}{{ month|date:"F, Y" }}{% endif %}{% if day %}{{ day|date:"F j, Y" }}{% endif %}{% endblock %}
+{% block title %}Entries for {{ day|date:"F j, Y" }}{% endblock %}
 {% block head_extra %}<link href="{% url djog_feed "latest" %}" title="{{ blog.title }} - Latest Entries" type="application/rss+xml" rel="alternate"/>{% endblock %}
 {% block rss %}<a href="{% url djog_feed "latest" %}">RSS</a>{% endblock %}
 
