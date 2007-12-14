@@ -13,10 +13,14 @@ from djog.managers import EntryManager
 
 class Blog(models.Model):
     site = models.ForeignKey(Site)
-    title = models.CharField(_('Title'), max_length=100)
+    title = models.CharField(_("title"), max_length=100)
     
     objects = models.Manager()
     on_site = CurrentSiteManager()
+    
+    class Meta:
+        verbose_name = _("blog")
+        verbose_name_plural = _("blogs")
     
     class Admin:
         pass
@@ -32,19 +36,19 @@ class Entry(models.Model):
     TYPE_PAGE = 1
     
     ENTRY_TYPES = (
-        (TYPE_POST, 'Post'),
-        (TYPE_PAGE, 'Page'),
+        (TYPE_POST, _("Post")),
+        (TYPE_PAGE, _("Page")),
     )
 
-    blog = models.ForeignKey(Blog, verbose_name=_('Blog'))
-    title = models.CharField(_('Title'), max_length=100, unique=True)
-    slug = models.SlugField(_('Slug'), prepopulate_from=("title",), max_length=100, unique=True)
-    text = models.TextField(_('Text'))
-    author = models.ForeignKey(User, verbose_name=_('Author'))
-    tags = models.ManyToManyField("Tag", verbose_name=_('Tag'), filter_interface=models.HORIZONTAL)
-    pub_date = models.DateTimeField(default=datetime.datetime.now)
-    entry_type = models.IntegerField(choices=ENTRY_TYPES, 
-        help_text=_('Select what type of Entry this is, currently there are regular blog posts, and pages(such as an About page, or a contact page).'), 
+    blog = models.ForeignKey(Blog, verbose_name=_("blog"))
+    title = models.CharField(_("title"), max_length=100, unique=True)
+    slug = models.SlugField(_("slug"), prepopulate_from=("title",), max_length=100, unique=True)
+    text = models.TextField(_("text"))
+    author = models.ForeignKey(User, verbose_name=_("author"))
+    tags = models.ManyToManyField("Tag", verbose_name=_("tag"), filter_interface=models.HORIZONTAL)
+    pub_date = models.DateTimeField(_("publish date"), default=datetime.datetime.now)
+    entry_type = models.IntegerField(_("entry type"), choices=ENTRY_TYPES,
+        help_text=_("Select what type of entry this is, currently there are regular blog posts, and pages (ex. about or contact page)."),
         radio_admin=True, default=TYPE_POST)
     
     objects = EntryManager()
@@ -53,14 +57,18 @@ class Entry(models.Model):
         return self.title
 
     class Meta:
-        verbose_name_plural = _('Entries')
-        ordering = ('-pub_date',)
-        get_latest_by = 'pub_date'
+        verbose_name = _("entry")
+        verbose_name_plural = _("entries")
+        ordering = ("-pub_date",)
+        get_latest_by = "pub_date"
         unique_together = (("slug", "entry_type"),)
 
     class Admin:
-        list_display = ('pub_date', 'title',)
-        search_fields = ['title', 'text']
+        list_display = ("id", "title", "pub_date",)
+        list_display_links = ("id", "title",)
+        list_filter = ("entry_type",)
+        search_fields = ("title", "text",)
+        date_hierarchy = "pub_date"
 
     def get_absolute_url(self):
         if self.entry_type == self.TYPE_POST:
@@ -84,13 +92,17 @@ class Entry(models.Model):
         return urlresolvers.reverse('djog_trackback', kwargs=dict(id=self.pk))
 
 class Tag(models.Model):
-    blog = models.ForeignKey(Blog, verbose_name=_('Blog'))
-    tag = models.CharField(_('Tag'), max_length=50, unique=True, core=True)
-    slug = models.SlugField(_('Slug'), prepopulate_from=("tag",), max_length=50, unique=True)
+    blog = models.ForeignKey(Blog, verbose_name=_("blog"))
+    tag = models.CharField(_("tag"), max_length=50, unique=True, core=True)
+    slug = models.SlugField(_("slug"), prepopulate_from=("tag",), max_length=50, unique=True)
 
     def __unicode__(self):
         return self.tag
-
+    
+    class Meta:
+        verbose_name = _("tag")
+        verbose_name_plural = _("tags")
+        
     class Admin:
         pass
 
@@ -112,14 +124,21 @@ class Tag(models.Model):
         ))
 
 class TrackBack(models.Model):
-    entry = models.ForeignKey(Entry, verbose_name=_('Entry'), edit_inline=models.STACKED, num_in_admin=1)
-    url = models.URLField(_('URL'), max_length=255, core=True)
-    tbURL = models.URLField(_('Trackback URL'), max_length=255, null=True, blank=True, editable=False)
-    status = models.BooleanField(_('Status'), null=True, blank=True, editable=False)
-    error = models.CharField(_('Error'), max_length=255, null=True, blank=True, editable=False)
+    entry = models.ForeignKey(Entry, verbose_name=_("entry"), edit_inline=models.STACKED, num_in_admin=1)
+    url = models.URLField(_("URL"), max_length=255, core=True)
+    tbURL = models.URLField(_("trackback URL"), max_length=255, null=True, blank=True, editable=False)
+    status = models.BooleanField(_("status"), null=True, blank=True, editable=False)
+    error = models.CharField(_("error"), max_length=255, null=True, blank=True, editable=False)
     
     def __unicode__(self):
         return self.url
+    
+    class Meta:
+        verbose_name = _("trackback")
+        verbose_name_plural = _("trackbacks")
+        
+    class Admin:
+        pass
     
     def _connect_to_url(self, url):
         # ensure the url starts with http since the connection wont work
@@ -172,28 +191,29 @@ class TrackBack(models.Model):
         self.autodiscover()
         self.ping()
         super(TrackBack, self).save(**kwargs)
-    
-    class Admin:
-        pass
 
 class IncomingTrackBack(models.Model):
-    title = models.CharField(_('Title'), max_length=255, null=True, blank=True, editable=False)
-    excerpt = models.CharField(_('Excerpt'), max_length=255, null=True, blank=True, editable=False)
-    url = models.URLField(_('URL'), max_length=255, editable=False)
-    blog = models.CharField(_('Blog'), max_length=255, null=True, blank=True, editable=False)
-    entry = models.ForeignKey(Entry, verbose_name=_('Entry'))
-    time = models.DateTimeField(_('Time'), default=datetime.datetime.now)
+    title = models.CharField(_("title"), max_length=255, null=True, blank=True, editable=False)
+    excerpt = models.CharField(_("excerpt"), max_length=255, null=True, blank=True, editable=False)
+    url = models.URLField(_("URL"), max_length=255, editable=False)
+    blog = models.CharField(_("blog"), max_length=255, null=True, blank=True, editable=False)
+    entry = models.ForeignKey(Entry, verbose_name=_("entry"))
+    time = models.DateTimeField(_("time"), default=datetime.datetime.now)
     
     def __unicode__(self):
         return "%s: %s" % (self.blog, self.title)
+    
+    class Meta:
+        verbose_name = _("incoming trackback")
+        verbose_name_plural = _("incoming trackbacks")
     
     class Admin:
         pass
 
 class Configuration(models.Model):
-    blog = models.ForeignKey(Blog, verbose_name=_('Blog'))
-    option = models.CharField(max_length=255)
-    value = models.CharField(max_length=255)
+    blog = models.ForeignKey(Blog, verbose_name=_("blog"))
+    option = models.CharField(_("option"), max_length=255)
+    value = models.CharField(_("option"), max_length=255)
     
     def __unicode__(self):
         return "%s: %s" % (self.option, self.value)
