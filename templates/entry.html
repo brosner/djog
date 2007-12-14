@@ -21,12 +21,12 @@
 <!--
 <rdf:RDF	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 			xmlns:dc="http://purl.org/dc/elements/1.1/"
-			xmlns:trackback="http://71.201.176.194:8080/blog/">
+			xmlns:trackback="http://dev.oebfare.com/projects/djog/">
 <rdf:Description
-			rdf:about="http://71.201.176.194:8080{{ entry.get_absolute_url }}"
-			dc:identifier="http://71.201.176.194:8080{{ entry.get_absolute_url }}"
+			rdf:about="{{ entry.blog.site.domain }}{{ entry.get_absolute_url }}"
+			dc:identifier="{{ entry.blog.site.domain }}{{ entry.get_absolute_url }}"
 			dc:title="{{ entry.title }}"
-			trackback:ping="http://71.201.176.194:8080{{ entry.get_trackback_url }}" />
+			trackback:ping="{{ entry.blog.site.domain }}{{ entry.get_trackback_url }}" />
 </rdf:RDF>
 -->
 </div>
