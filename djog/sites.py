@@ -26,7 +26,7 @@ class DjogSite(object):
     
     def archive_index(self, request, **kwargs):
         defaults = dict(
-            queryset = self.get_blog().entry_set.filter(entry_type=Entry.TYPE_POST),
+            queryset = self.get_blog().entry_set.of_type(Entry.TYPE_POST),
             date_field = 'pub_date',
         )
         defaults.update(kwargs)
@@ -34,7 +34,7 @@ class DjogSite(object):
 
     def archive_year(self, request, **kwargs):
         defaults = dict(
-            queryset = self.get_blog().entry_set.filter(entry_type=Entry.TYPE_POST),
+            queryset = self.get_blog().entry_set.of_type(Entry.TYPE_POST),
             date_field = 'pub_date',
             template_name = 'djog/archive_year.html',
         )
@@ -43,7 +43,7 @@ class DjogSite(object):
 
     def archive_month(self, request, **kwargs):
         defaults = dict(
-            queryset = self.get_blog().entry_set.filter(entry_type=Entry.TYPE_POST),
+            queryset = self.get_blog().entry_set.of_type(Entry.TYPE_POST),
             date_field = 'pub_date',
             template_name = 'djog/archive_month.html',
         )
@@ -52,7 +52,7 @@ class DjogSite(object):
 
     def archive_day(self, request, **kwargs):
         defaults = dict(
-            queryset = self.get_blog().entry_set.filter(entry_type=Entry.TYPE_POST),
+            queryset = self.get_blog().entry_set.of_type(Entry.TYPE_POST),
             date_field = 'pub_date',
             template_name = 'djog/archive_day.html',
         )
@@ -61,7 +61,7 @@ class DjogSite(object):
 
     def post(self, request, **kwargs):
         defaults = dict(
-            queryset = self.get_blog().entry_set.filter(entry_type=Entry.TYPE_POST),
+            queryset = self.get_blog().entry_set.of_type(Entry.TYPE_POST),
             date_field = 'pub_date',
         )
         defaults.update(kwargs)
@@ -82,7 +82,7 @@ class DjogSite(object):
     
     def page(self, request, **kwargs):
         defaults = dict(
-            queryset = self.get_blog().entry_set.filter(entry_type=Entry.TYPE_PAGE),
+            queryset = self.get_blog().entry_set.of_type(Entry.TYPE_PAGE),
             slug_field = 'slug',
             template_name = 'djog/entry_detail.html',
         )

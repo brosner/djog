@@ -9,6 +9,8 @@ from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.contrib.sites.managers import CurrentSiteManager
 
+from djog.managers import EntryManager
+
 class Blog(models.Model):
     site = models.ForeignKey(Site)
     title = models.CharField(_('Title'), max_length=100)
@@ -44,6 +46,8 @@ class Entry(models.Model):
     entry_type = models.IntegerField(choices=ENTRY_TYPES, 
         help_text=_('Select what type of Entry this is, currently there are regular blog posts, and pages(such as an About page, or a contact page).'), 
         radio_admin=True, default=TYPE_POST)
+    
+    objects = EntryManager()
     
     def __unicode__(self):
         return self.title
@@ -90,8 +94,13 @@ class Tag(models.Model):
     class Admin:
         pass
 
-    def num_stories(self):
-        return Entry.objects.filter(tags__tag=unicode(self)).count()
+    def _get_num_stories(self):
+        if not hasattr(self, "_num_stories"):
+            self._num_stories = Entry.objects.filter(
+                tags__tag=unicode(self)
+            ).count()
+        return self._num_stories
+    num_stories = property(_get_num_stories)
 
     def get_absolute_url(self):
         return urlresolvers.reverse('djog_entries_by_tag',
