@@ -7,9 +7,7 @@
 {% block rss %}<a href="{{ tag.get_rss_url }}">RSS</a>{% endblock %}
 
 {% block content %}
-{% load comments %}
 {% for entry in entries %}
-{% get_free_comment_count for djog.entry entry.pk as comment_count %}
 {% show_entry entry %}
 {% endfor %}
 {% endblock %}

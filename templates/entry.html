@@ -1,3 +1,5 @@
+{% load comments %}
+{% get_free_comment_count for djog.entry entry.pk as comment_count %}
 <div id="post_{{ entry.pk }}" class="post">
 	<div class="post_date">
 		<div class="post_month">{{ entry.pub_date|date:"M" }}</div>
