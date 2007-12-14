@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load djog_utils %}
+
 {% block title %}Entries for {% if year %}{{ year }}{% endif %}{% if month %}{{ month|date:"F, Y" }}{% endif %}{% if day %}{{ day|date:"F j, Y" }}{% endif %}{% endblock %}
 {% block head_extra %}<link href="{% url djog_feed "latest" %}" title="{{ blog.title }} - Latest Entries" type="application/rss+xml" rel="alternate"/>{% endblock %}
 {% block rss %}<a href="{% url djog_feed "latest" %}">RSS</a>{% endblock %}
@@ -9,6 +11,6 @@
 {% load comments %}
 {% for entry in object_list %}
 {% get_free_comment_count for djog.entry entry.pk as comment_count %}
-{% include "entry.html" %}
+{% show_entry entry %}
 {% endfor %}
 {% endblock %}

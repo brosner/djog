@@ -4,6 +4,10 @@ from djog.models import *
 
 register = template.Library()
 
+def show_entry(entry):
+    return dict(entry=entry)
+register.inclusion_tag("entry.html")(show_entry)
+
 def show_tags():
     tags = Tag.objects.all().order_by('tag')
     return {'tags': tags}
