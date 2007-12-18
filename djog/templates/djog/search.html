@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "djog/base.html" %}
 {% load djog_utils %}
 {% block title %}Search Results for &quot;{{ term|escape }}&quot;{% endblock %}
 {% block head_extra %}<link href="{% url djog_feed term|escape|searchify %}" title="{{ blog.title }} - Search Results for &quot;{{ term|escape }}&quot;" type="application/rss+xml" rel="alternate" />{% endblock %}
