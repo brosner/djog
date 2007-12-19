@@ -6,6 +6,7 @@ from django.contrib.sites.models import Site
 from djog.models import Blog
 from djog import models as blog_app
 
+
 def create_default_blog(app, created_models, verbosity):
     if Blog in created_models and Site in created_models:
         if verbosity >= 2:
@@ -15,4 +16,5 @@ def create_default_blog(app, created_models, verbosity):
         b = Blog(site=s, title='Default Blog')
         b.save()
 
-dispatcher.connect(create_default_blog, sender=blog_app, signal=signals.post_syncdb)
+dispatcher.connect(create_default_blog, sender = blog_app,
+                                        signal = signals.post_syncdb)

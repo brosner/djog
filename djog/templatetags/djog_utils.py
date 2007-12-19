@@ -8,10 +8,12 @@ def show_entry(entry):
     return dict(entry=entry)
 register.inclusion_tag("entry.html")(show_entry)
 
+
 def show_tags():
     tags = Tag.objects.all().order_by("tag")
     return {"tags": [tag for tag in tags if tag.num_stories > 0]}
 register.inclusion_tag("tags.html")(show_tags)
+
 
 def show_archive():
     entries = Entry.objects.of_type(Entry.TYPE_POST)
@@ -24,10 +26,12 @@ def show_archive():
     return {"counts": dates}
 register.inclusion_tag("monthly.html")(show_archive)
 
+
 def show_pages():
     pages = Entry.objects.of_type(Entry.TYPE_PAGE)
     return {"pages": pages}
 register.inclusion_tag("pages.html")(show_pages)
+
 
 def searchify(term):
     return "search/%s" % term

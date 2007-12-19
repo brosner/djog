@@ -1,7 +1,12 @@
 
 from django.db import models
 
+
 class EntryManager(models.Manager):
+    """
+    An Entry Manager class.
+    """
+    
     def of_type(self, type_):
         """
         Returns a queryset filtering the entries to the given type.

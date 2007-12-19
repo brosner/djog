@@ -1,5 +1,9 @@
 
-import datetime, httplib, urllib, urlparse, re
+import re
+import urllib
+import httplib
+import datetime
+import urlparse
 
 from django.core import urlresolvers
 from django.db import models
@@ -10,6 +14,7 @@ from django.contrib.sites.models import Site
 from django.contrib.sites.managers import CurrentSiteManager
 
 from djog.managers import EntryManager
+
 
 class Blog(models.Model):
     site = models.ForeignKey(Site)
@@ -31,7 +36,12 @@ class Blog(models.Model):
     def get_absolute_url(self):
         return urlresolvers.reverse('djog_index')
 
+
 class Entry(models.Model):
+    """
+    Represents either a blog post or page in the blog.
+    """
+    
     TYPE_POST = 0
     TYPE_PAGE = 1
     
@@ -42,13 +52,17 @@ class Entry(models.Model):
 
     blog = models.ForeignKey(Blog, verbose_name=_("blog"))
     title = models.CharField(_("title"), max_length=100, unique=True)
-    slug = models.SlugField(_("slug"), prepopulate_from=("title",), max_length=100, unique=True)
+    slug = models.SlugField(_("slug"), max_length=100, unique=True,
+        prepopulate_from=("title",))
     text = models.TextField(_("text"))
     author = models.ForeignKey(User, verbose_name=_("author"))
-    tags = models.ManyToManyField("Tag", verbose_name=_("tag"), filter_interface=models.HORIZONTAL)
-    pub_date = models.DateTimeField(_("publish date"), default=datetime.datetime.now)
+    tags = models.ManyToManyField("Tag", verbose_name=_("tag"),
+        filter_interface=models.HORIZONTAL)
+    pub_date = models.DateTimeField(_("publish date"),
+        default=datetime.datetime.now)
     entry_type = models.IntegerField(_("entry type"), choices=ENTRY_TYPES,
-        help_text=_("Select what type of entry this is, currently there are regular blog posts, and pages (ex. about or contact page)."),
+        help_text=_("Select what type of entry this is, currently there are "
+                    "regular blog posts, and pages (ex. about or contact page)."),
         radio_admin=True, default=TYPE_POST)
     
     objects = EntryManager()
@@ -91,6 +105,7 @@ class Entry(models.Model):
     def get_trackback_url(self):
         return urlresolvers.reverse('djog_trackback', kwargs=dict(id=self.pk))
 
+
 class Tag(models.Model):
     blog = models.ForeignKey(Blog, verbose_name=_("blog"))
     tag = models.CharField(_("tag"), max_length=50, unique=True, core=True)
@@ -122,6 +137,7 @@ class Tag(models.Model):
         return urlresolvers.reverse('djog_feed', kwargs=dict(
             url = 'tags/%s' % self.slug
         ))
+
 
 class TrackBack(models.Model):
     entry = models.ForeignKey(Entry, verbose_name=_("entry"), edit_inline=models.STACKED, num_in_admin=1)
@@ -192,6 +208,7 @@ class TrackBack(models.Model):
         self.ping()
         super(TrackBack, self).save(**kwargs)
 
+
 class IncomingTrackBack(models.Model):
     title = models.CharField(_("title"), max_length=255, null=True, blank=True, editable=False)
     excerpt = models.CharField(_("excerpt"), max_length=255, null=True, blank=True, editable=False)
@@ -210,6 +227,7 @@ class IncomingTrackBack(models.Model):
     class Admin:
         pass
 
+
 class Configuration(models.Model):
     blog = models.ForeignKey(Blog, verbose_name=_("blog"))
     option = models.CharField(_("option"), max_length=255)
@@ -217,4 +235,3 @@ class Configuration(models.Model):
     
     def __unicode__(self):
         return "%s: %s" % (self.option, self.value)
-    

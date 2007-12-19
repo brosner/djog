@@ -9,9 +9,9 @@ from django.utils.encoding import smart_str
 from django.contrib.comments.views.comments import post_free_comment
 from django.contrib.syndication.views import feed
 
+from djog.forms import CommentForm
 from djog.models import Blog, Tag, Entry
 
-from djog.forms import CommentForm
 
 class DjogSite(object):
     
@@ -115,7 +115,7 @@ class DjogSite(object):
         return feed(request, url, self.feeds)
     
     def search(self, request):
-        if not request.GET.has_key('s'):
+        if "s" not in request.GET:
             return HttpResponseRedirect(urlresolvers.reverse('djog_index'))
         search = smart_str(request.GET['s'])
         results = Entry.objects.filter(
